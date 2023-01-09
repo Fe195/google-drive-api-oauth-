@@ -1,11 +1,11 @@
-import { uploadFiles } from '../helpers/google.helper.js.js';
+import { deleteFiles, uploadFiles } from '../helpers/google.helper.js.js';
 import { find_email } from '../models/profile.models.js';
 import {
   doc_id,
   findAndUpdate,
   valid_document,
   valid_user,
-  create_file
+  create_file,
 } from '../models/document.models.js';
 import { isValidObjectId, isValid } from '../helpers/utils.helpers.js';
 
@@ -39,13 +39,14 @@ export const createDocument = async (req, res) => {
     let fileResponse;
     if (files && files.length > 0) {
       fileResponse = await uploadFiles(files[0]);
-     
     } else
       return res
         .status(400)
         .send({ status: false, message: 'Please Provide Document' });
 
-    let DocUrl = 'https://drive.google.com/drive/folders/1HCiS43jlw-of6reLSiOCrXS3kEAQsEda' + fileResponse;
+    let DocUrl =
+      'https://drive.google.com/drive/folders/1HCiS43jlw-of6reLSiOCrXS3kEAQsEda' +
+      fileResponse;
     createDocument['file'] = DocUrl;
 
     const uploadedData = await create_file(createDocument);
@@ -125,9 +126,8 @@ export const deleteDocument = async (req, res) => {
         .status(400)
         .send({ status: false, message: 'please Prvide valid Object Id' });
     }
-
-    const deleteDocument = await findAndUpdate({ _id: docId });
-
+    const deleteFile = await deleteFiles(docId);
+    const deleteDocument = await findAndUpdate(docId);
     if (!deleteDocument)
       return res
         .status(404)

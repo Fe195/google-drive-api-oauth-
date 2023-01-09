@@ -164,7 +164,7 @@ export const loginUser = async function (req, res) {
             Project: 'it is assingment',
           },
           process.env.SECRET_KEY,
-          { expiresIn: '30m' }
+          { expiresIn: '2h' }
         );
 
         return res
