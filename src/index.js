@@ -1,9 +1,10 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
+
 import multer from 'multer';
 import connectDatabase from './database/mongodb.database.js';
-import router from './routes/route.js';
+import router from './routes/route.routes.js';
 import cors from 'cors';
 
 const app = express();

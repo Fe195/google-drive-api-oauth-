@@ -1,7 +1,12 @@
-import { Profile } from '../models/profile.js';
+import {
+  create_file,
+  find_email,
+  find_phone,
+  Profile,
+} from '../models/profile.models.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { uploadFiles } from '../helpers/googledrive.js';
+import { uploadFiles } from '../helpers/google.helper.js.js';
 
 import {
   isValidRequestBody,
@@ -9,7 +14,7 @@ import {
   isvalidEmail,
   isValidPassword,
   isValidPhone,
-} from '../helpers/utils.js';
+} from '../helpers/utils.helpers.js';
 
 export const createUser = async function (req, res) {
   try {
@@ -37,7 +42,7 @@ export const createUser = async function (req, res) {
         .send({ status: false, message: 'Email-ID is required' });
 
     if (email) {
-      const checkEmail = await Profile.findOne({ email: email });
+      const checkEmail = await find_email(email);
 
       if (!isvalidEmail(email))
         return res.status(400).send({
@@ -45,12 +50,10 @@ export const createUser = async function (req, res) {
           message: 'Invalid Email id. Ex: example12@gmail.com',
         });
       else if (checkEmail)
-        return res
-          .status(400)
-          .send({
-            status: false,
-            message: `the ${email} should be unique it's already exist!`,
-          });
+        return res.status(400).send({
+          status: false,
+          message: `the ${email} should be unique it's already exist!`,
+        });
     }
     creatdata['email'] = email;
 
@@ -59,7 +62,7 @@ export const createUser = async function (req, res) {
         .status(400)
         .send({ status: false, message: 'Phone number is required' });
 
-    const checkPhone = await Profile.findOne({ phone: phone });
+    const checkPhone = await find_phone(phone);
     if (phone) {
       if (!isValidPhone(phone))
         return res.status(400).send({
@@ -67,12 +70,10 @@ export const createUser = async function (req, res) {
           message: 'Invalid Phone number',
         });
       else if (checkPhone)
-        return res
-          .status(400)
-          .send({
-            status: false,
-            message: `the ${phone} should be unique it's already exist!`,
-          });
+        return res.status(400).send({
+          status: false,
+          message: `the ${phone} should be unique it's already exist!`,
+        });
     }
     creatdata['phone'] = phone;
 
@@ -88,12 +89,10 @@ export const createUser = async function (req, res) {
           message: 'Invalid Phone number',
         });
       else if (password.length < 8 || password.length > 15)
-        return res
-          .status(400)
-          .send({
-            status: false,
-            message: 'Password must be of 8-15 letters.',
-          });
+        return res.status(400).send({
+          status: false,
+          message: 'Password must be of 8-15 letters.',
+        });
       else {
         creatdata['password'] = await bcrypt.hash(password, 10);
       }
@@ -110,7 +109,7 @@ export const createUser = async function (req, res) {
     let imgUrl = 'https://drive.google.com/uc?export=view&id=' + imgcode;
     creatdata['photo'] = imgUrl;
 
-    let createdData = await Profile.create(creatdata);
+    let createdData = await create_file(creatdata);
     if (!createdData) {
       return res.status(400).send({ status: false, message: 'Try again' });
     }
@@ -143,7 +142,7 @@ export const loginUser = async function (req, res) {
         message: 'Invalid Email id. Ex: example12@gmail.com',
       });
 
-    const user = await Profile.findOne({ email: email });
+    const user = await find_email(email);
     if (!user) {
       return res.status(404).send({ status: false, message: 'User not found' });
     }

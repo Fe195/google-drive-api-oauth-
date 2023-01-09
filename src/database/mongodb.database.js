@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
-
+import { MONGO_CONNECTION_URL } from '../config.js';
 mongoose.set('strictQuery', false);
 
 const connectDatabase = () => {
   console.log('mongodb is connecting');
   mongoose
     .connect(
-      'mongodb+srv://amarjeet:8ckRS2Equ0wiGgKx@cluster0.9lvsazp.mongodb.net/test',
+      MONGO_CONNECTION_URL,
       {
         useNewUrlParser: true,
       }
