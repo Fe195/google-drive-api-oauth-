@@ -26,7 +26,7 @@ const url = oauth2client.generateAuthUrl({
   scope: scopes,
 });
 
-console.log(url);
+// console.log(url);
 oauth2client.setCredentials({ refresh_token: refresh_token });
 const drive = google.drive({ version: 'v3', auth: oauth2client });
 const filePath = path.join(__dirname, 'postman.png');
