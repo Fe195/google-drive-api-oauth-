@@ -16,6 +16,7 @@ const refresh_token = GOOGLE.AUTH.REFRESH_TOKEN;
 const folderId = process.env.GOOGLE_API_FOLDER_ID;
 
 const scopes = ['https://www.googleapis.com/auth/drive'];
+
 const oauth2client = new google.auth.OAuth2(
   client_id,
   client_secret,

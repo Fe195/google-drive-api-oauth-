@@ -15,8 +15,5 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(multer().any());
 app.use('/', router);
-app.use('*', (req, res) =>
-  res.status(404).send({ status: false, message: 'please enter valid URL' })
-);
 
 app.listen(port, () => console.log(`Connected on Port ${port}`));
